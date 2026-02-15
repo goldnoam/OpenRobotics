@@ -1,5 +1,5 @@
 
-module.exports = {
+export default {
   content: ["./index.html", "./App.tsx", "./constants.tsx"],
   darkMode: 'class',
   theme: {
