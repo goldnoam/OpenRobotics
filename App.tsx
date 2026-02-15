@@ -3,25 +3,23 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Cpu, 
   BookOpen, 
-  Tool, 
-  Map as MapIcon, 
   Search, 
   Moon, 
   Sun, 
   Github, 
   ExternalLink, 
-  ChevronLeft,
-  Settings,
-  ShieldCheck,
-  Code,
-  CheckCircle2,
-  XCircle,
-  Layers,
-  Globe,
-  Filter
+  ShieldCheck, 
+  Settings, 
+  Code, 
+  Layers, 
+  Globe, 
+  Filter,
+  X,
+  RotateCcw,
+  Check
 } from 'lucide-react';
 import { RESOURCES, ROADMAP, TOP_COMPARISON } from './constants';
-import { Resource, Difficulty, ResourceCategory, ComparisonEntry } from './types';
+import { Resource, Difficulty, ResourceCategory } from './types';
 import { TRANSLATIONS, Language } from './translations';
 
 // Components
@@ -104,7 +102,7 @@ const ResourceCard: React.FC<{ resource: Resource, t: any }> = ({ resource, t })
   };
 
   return (
-    <div className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 transition-all hover:shadow-xl hover:-translate-y-1">
+    <div className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 transition-all hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
       <div className="flex justify-between items-start mb-4">
         <span className={`px-3 py-1 rounded-full text-xs font-bold ${getDifficultyColor(resource.difficulty)}`}>
           {resource.difficulty}
@@ -121,7 +119,7 @@ const ResourceCard: React.FC<{ resource: Resource, t: any }> = ({ resource, t })
         </div>
       </div>
       <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{resource.name}</h3>
-      <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+      <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed flex-grow">
         {resource.description}
       </p>
       <div className="flex flex-wrap gap-2 mb-6">
@@ -240,8 +238,10 @@ const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [language, setLanguage] = useState<Language>('he');
   const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState<ResourceCategory | 'All'>('All');
-  const [activeDifficulty, setActiveDifficulty] = useState<Difficulty | 'All'>('All');
+  
+  // Refined Multi-Select Filters
+  const [selectedCategories, setSelectedCategories] = useState<ResourceCategory[]>([]);
+  const [selectedDifficulties, setSelectedDifficulties] = useState<Difficulty[]>([]);
   const [commercialFilter, setCommercialFilter] = useState<'All' | 'Commercial' | 'OpenSource'>('All');
 
   const t = useMemo(() => TRANSLATIONS[language], [language]);
@@ -256,15 +256,36 @@ const App: React.FC = () => {
     return RESOURCES.filter(res => {
       const matchesSearch = res.name.toLowerCase().includes(search.toLowerCase()) || 
                           res.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
-      const matchesCategory = activeCategory === 'All' || res.category === activeCategory;
-      const matchesDifficulty = activeDifficulty === 'All' || res.difficulty === activeDifficulty;
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(res.category);
+      const matchesDifficulty = selectedDifficulties.length === 0 || selectedDifficulties.includes(res.difficulty);
       const matchesCommercial = commercialFilter === 'All' || 
                                (commercialFilter === 'Commercial' && res.isCommercial) ||
                                (commercialFilter === 'OpenSource' && !res.isCommercial);
       
       return matchesSearch && matchesCategory && matchesDifficulty && matchesCommercial;
     });
-  }, [search, activeCategory, activeDifficulty, commercialFilter]);
+  }, [search, selectedCategories, selectedDifficulties, commercialFilter]);
+
+  const toggleCategory = (cat: ResourceCategory) => {
+    setSelectedCategories(prev => 
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  };
+
+  const toggleDifficulty = (diff: Difficulty) => {
+    setSelectedDifficulties(prev => 
+      prev.includes(diff) ? prev.filter(d => d !== diff) : [...prev, diff]
+    );
+  };
+
+  const clearAllFilters = () => {
+    setSearch('');
+    setSelectedCategories([]);
+    setSelectedDifficulties([]);
+    setCommercialFilter('All');
+  };
+
+  const hasActiveFilters = search !== '' || selectedCategories.length > 0 || selectedDifficulties.length > 0 || commercialFilter !== 'All';
 
   return (
     <div className="min-h-screen">
@@ -315,9 +336,9 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <main className="container mx-auto px-6 pb-24">
         {/* Search & Filters */}
-        <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-8 mb-12">
+        <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-6 mb-12">
           <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
-            <div className="relative w-full lg:w-1/3">
+            <div className="relative w-full lg:w-1/2">
               <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input 
                 type="text" 
@@ -328,53 +349,86 @@ const App: React.FC = () => {
               />
             </div>
             
-            <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-center lg:justify-end">
-               <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-2xl">
-                 <Filter className="w-4 h-4 text-gray-400" />
-                 <select 
-                    className="bg-transparent text-sm font-bold outline-none border-none focus:ring-0 cursor-pointer"
-                    value={activeDifficulty}
-                    onChange={(e) => setActiveDifficulty(e.target.value as any)}
-                    title={t.filter_difficulty}
+            <div className="flex items-center gap-4 w-full lg:w-auto justify-center lg:justify-end">
+               {hasActiveFilters && (
+                 <button 
+                   onClick={clearAllFilters}
+                   className="flex items-center gap-2 text-sm font-bold text-red-500 hover:text-red-600 transition-colors bg-red-50 dark:bg-red-900/10 px-4 py-2 rounded-xl"
+                   title="Clear all filters"
                  >
-                   <option value="All">{t.filter_difficulty}: {t.filter_all}</option>
-                   {Object.values(Difficulty).map(diff => (
-                     <option key={diff} value={diff}>{diff}</option>
-                   ))}
-                 </select>
-               </div>
-
-               <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-2xl">
-                 <ShieldCheck className="w-4 h-4 text-gray-400" />
-                 <select 
-                    className="bg-transparent text-sm font-bold outline-none border-none focus:ring-0 cursor-pointer"
-                    value={commercialFilter}
-                    onChange={(e) => setCommercialFilter(e.target.value as any)}
-                    title={t.filter_commercial}
-                 >
-                   <option value="All">{t.filter_commercial}: {t.filter_all}</option>
-                   <option value="Commercial">{t.commercial_only}</option>
-                   <option value="OpenSource">{t.open_source_only}</option>
-                 </select>
-               </div>
+                   <RotateCcw className="w-4 h-4" />
+                   {language === 'he' ? 'נקה הכל' : 'Clear All'}
+                 </button>
+               )}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 justify-center lg:justify-start">
-            {['All', ...Object.values(ResourceCategory)].map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat as any)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                  activeCategory === cat 
-                  ? 'bg-primary text-white' 
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
-                }`}
-                title={cat === 'All' ? t.filter_all : cat}
-              >
-                {cat === 'All' ? t.filter_all : cat}
-              </button>
-            ))}
+          <div className="space-y-4">
+            {/* Category Filter */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[100px]">{t.filter_all}:</span>
+              <div className="flex flex-wrap gap-2">
+                {Object.values(ResourceCategory).map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => toggleCategory(cat)}
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2 ${
+                      selectedCategories.includes(cat) 
+                      ? 'bg-primary text-white' 
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {selectedCategories.includes(cat) && <Check className="w-3 h-3" />}
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Difficulty Filter */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[100px]">{t.filter_difficulty}:</span>
+              <div className="flex flex-wrap gap-2">
+                {Object.values(Difficulty).map(diff => (
+                  <button
+                    key={diff}
+                    onClick={() => toggleDifficulty(diff)}
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
+                      selectedDifficulties.includes(diff) 
+                      ? 'bg-secondary text-white' 
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {selectedDifficulties.includes(diff) && <Check className="w-3 h-3" />}
+                    {diff}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* License Filter */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[100px]">{t.filter_commercial}:</span>
+              <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+                {[
+                  { value: 'All', label: t.filter_all },
+                  { value: 'Commercial', label: t.commercial_only },
+                  { value: 'OpenSource', label: t.open_source_only }
+                ].map(opt => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setCommercialFilter(opt.value as any)}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      commercialFilter === opt.value 
+                      ? 'bg-white dark:bg-gray-700 text-primary shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -386,8 +440,17 @@ const App: React.FC = () => {
         </div>
 
         {filteredResources.length === 0 && (
-          <div className="text-center py-20">
+          <div className="text-center py-20 flex flex-col items-center">
+            <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-full mb-4">
+              <X className="w-12 h-12 text-gray-400" />
+            </div>
             <p className="text-gray-400 text-lg">No results found...</p>
+            <button 
+              onClick={clearAllFilters}
+              className="mt-4 text-primary font-bold hover:underline"
+            >
+              Reset all filters
+            </button>
           </div>
         )}
       </main>
