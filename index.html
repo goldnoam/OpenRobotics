@@ -17,19 +17,36 @@
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0274741291001288" crossorigin="anonymous"></script>
 
-    <!-- Production CSS -->
-    <link rel="stylesheet" href="index.css">
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#0F172A',
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/000000/robot-vacuum.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;400;700&display=swap');
-        body {
-            font-family: 'Assistant', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply antialiased bg-gray-50 dark:bg-dark text-gray-900 dark:text-gray-100 transition-colors duration-300;
+                font-family: 'Assistant', sans-serif;
+            }
         }
+        @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;400;700&display=swap');
+        
         .glass {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -50,7 +67,7 @@
 }
 </script>
 </head>
-<body class="bg-gray-50 dark:bg-dark text-gray-900 dark:text-gray-100">
+<body>
     <div id="root"></div>
 </body>
 </html>
