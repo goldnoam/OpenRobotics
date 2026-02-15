@@ -5,7 +5,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'ros2',
     name: 'ROS 2 (Robot Operating System)',
-    description: 'הסטנדרט העולמי לפיתוח רובוטים. מערכת הפעלה מבוזרת המאפשרת תקשורת בין חיישנים, מנועים ואלגוריתמים.',
+    description: 'The global standard for robot software development. A distributed middleware system that enables communication between sensors, motors, and algorithms.',
     link: 'https://docs.ros.org/',
     category: ResourceCategory.Software,
     difficulty: Difficulty.Intermediate,
@@ -15,7 +15,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'gazebo',
     name: 'Gazebo Simulator',
-    description: 'סימולטור פיזיקלי תלת-ממדי רב עוצמה המאפשר לבחון רובוטים בסביבות מורכבות לפני המעבר לחומרה.',
+    description: 'A powerful 3D physical simulator that allows testing robots in complex environments before transitioning to hardware.',
     link: 'https://gazebosim.org/',
     category: ResourceCategory.Simulation,
     difficulty: Difficulty.Intermediate,
@@ -25,7 +25,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'duckietown',
     name: 'Duckietown',
-    description: 'מערכת אקולוגית מקיפה ללימוד רובוטיקה ובינה מלאכותית. פלטפורמה המשלבת חומרה ותוכנה למטרות מחקר וחינוך אקדמי.',
+    description: 'A comprehensive ecosystem for learning robotics and AI. A platform combining hardware and software for research and academic education.',
     link: 'https://www.duckietown.org/',
     category: ResourceCategory.AI,
     difficulty: Difficulty.Intermediate,
@@ -35,7 +35,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'tortoisebot',
     name: 'TortoiseBot',
-    description: 'רובוט נייד מבוסס ROS, ידידותי במיוחד ללומדים וחסכוני בעלויות. פרויקט קוד פתוח מלא לבניית רובוט שירות בסיסי.',
+    description: 'A ROS-based mobile robot, extremely beginner-friendly and cost-effective. A full open-source project for building a basic service robot.',
     link: 'https://github.com/rigbetellabs/tortoisebot',
     category: ResourceCategory.Hardware,
     difficulty: Difficulty.Beginner,
@@ -45,7 +45,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'rosblox',
     name: 'ROSBloX',
-    description: 'אבני בניין תוכנתיות המפשטות את תהליך היצירה של ערימת התוכנה (Software Stack) ברובוטים מבוססי ROS.',
+    description: 'Software building blocks that simplify the creation of the software stack in ROS-based robots.',
     link: 'https://rosblox.com/',
     category: ResourceCategory.Software,
     difficulty: Difficulty.Intermediate,
@@ -55,7 +55,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'andino',
     name: 'Andino',
-    description: 'רובוט הנעה דיפרנציאלית בקוד פתוח מלא, המיועד למטרות חינוכיות ויישומים בעלות נמוכה במיוחד.',
+    description: 'A fully open-source differential drive robot intended for educational purposes and extremely low-cost applications.',
     link: 'https://github.com/ekumenlabs/andino',
     category: ResourceCategory.Hardware,
     difficulty: Difficulty.Beginner,
@@ -65,7 +65,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'nasa-rover',
     name: 'NASA JPL Open-Source Rover',
-    description: 'גרסה מוקטנת ופתוחה של רכב המאדים בעל 6 הגלגלים של נאס״א. פרויקט הנדסי מתקדם לבנייה עצמית של רכב שטח רובוטי.',
+    description: 'A scaled-down, open version of NASA\'s 6-wheeled Mars rover. An advanced engineering project for building a robotic off-road vehicle.',
     link: 'https://github.com/nasa-jpl/open-source-rover',
     category: ResourceCategory.Hardware,
     difficulty: Difficulty.Advanced,
@@ -75,7 +75,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'arduino',
     name: 'Arduino',
-    description: 'פלטפורמת קוד פתוח המבוססת על חומרה ותוכנה קלה לשימוש. מושלם ללימוד בקרת מנועים וחיישנים.',
+    description: 'An open-source hardware and software platform. Perfect for learning motor control and sensor integration.',
     link: 'https://www.arduino.cc/',
     category: ResourceCategory.Hardware,
     difficulty: Difficulty.Beginner,
@@ -85,7 +85,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'opencv',
     name: 'OpenCV',
-    description: 'ספריית קוד פתוח לעיבוד תמונה וראייה ממוחשבת. קריטי לרובוטים שצריכים "לראות" את הסביבה.',
+    description: 'Open-source library for image processing and computer vision. Critical for robots that need to "see" their environment.',
     link: 'https://opencv.org/',
     category: ResourceCategory.Vision,
     difficulty: Difficulty.Advanced,
@@ -95,7 +95,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'pybullet',
     name: 'PyBullet',
-    description: 'סימולטור קל משקל ומהיר מאוד, פופולרי במיוחד למחקר של למידת מכונה ורובוטיקה.',
+    description: 'A lightweight and very fast simulator, especially popular for machine learning research in robotics.',
     link: 'https://pybullet.org/',
     category: ResourceCategory.Simulation,
     difficulty: Difficulty.Advanced,
@@ -105,7 +105,7 @@ export const RESOURCES: Resource[] = [
   {
     id: 'webots',
     name: 'Webots',
-    description: 'סימולטור רובוטיקה מקצועי וחינמי המציע מגוון רחב של מודלים מוכנים של רובוטים מסחריים.',
+    description: 'A professional and free robotics simulator offering a wide range of ready-to-use models of commercial robots.',
     link: 'https://cyberbotics.com/',
     category: ResourceCategory.Simulation,
     difficulty: Difficulty.Beginner,
@@ -117,41 +117,41 @@ export const RESOURCES: Resource[] = [
 export const TOP_COMPARISON: ComparisonEntry[] = [
   {
     name: 'ROS 2',
-    useCase: 'תשתית תוכנה (Middleware)',
+    useCase: 'Software Infrastructure (Middleware)',
     difficulty: Difficulty.Intermediate,
-    industryStandard: 'כן (גבוה מאוד)',
+    industryStandard: 'Yes (Very High)',
     license: 'Apache 2.0',
     language: 'C++ / Python'
   },
   {
     name: 'Gazebo',
-    useCase: 'סימולציה פיזיקלית תלת-ממדית',
+    useCase: '3D Physical Simulation',
     difficulty: Difficulty.Intermediate,
-    industryStandard: 'כן (סטנדרט אקדמי/תעשייתי)',
+    industryStandard: 'Yes (Industry/Academic Standard)',
     license: 'Apache 2.0',
     language: 'C++'
   },
   {
     name: 'Duckietown',
-    useCase: 'סביבה לימודית ל-AI ונהיגה אוטונומית',
+    useCase: 'AI & Autonomous Driving Learning',
     difficulty: Difficulty.Intermediate,
-    industryStandard: 'חלקי (חינוך אקדמי)',
+    industryStandard: 'Partial (Academic focus)',
     license: 'MIT / CC',
     language: 'Python'
   },
   {
     name: 'TortoiseBot',
-    useCase: 'חומרה: רובוט נייד בסיסי',
+    useCase: 'Hardware: Basic Mobile Robot',
     difficulty: Difficulty.Beginner,
-    industryStandard: 'לא (פרויקט קהילה)',
+    industryStandard: 'No (Community project)',
     license: 'GPL',
     language: 'Python / ROS'
   },
   {
     name: 'NASA JPL Rover',
-    useCase: 'חומרה: רכב שטח מתקדם',
+    useCase: 'Hardware: Advanced Terrain Vehicle',
     difficulty: Difficulty.Advanced,
-    industryStandard: 'כן (ייחוס חינוכי)',
+    industryStandard: 'Yes (Educational benchmark)',
     license: 'Apache 2.0',
     language: 'Python / C++'
   }
@@ -159,32 +159,32 @@ export const TOP_COMPARISON: ComparisonEntry[] = [
 
 export const ROADMAP: RoadmapStep[] = [
   {
-    title: 'צעד ראשון: יסודות האלקטרוניקה',
-    description: 'הבנת מעגלים, בקרת LED, שימוש ב-Arduino וכתיבת קוד בסיסי ב-C/C++.',
+    title: 'Step One: Electronics Fundamentals',
+    description: 'Understanding circuits, LED control, using Arduino, and basic C/C++ coding.',
     level: Difficulty.Beginner,
     tools: ['Arduino', 'Tinkercad', 'Fritzing']
   },
   {
-    title: 'צעד שני: תכנות בשפה גבוהה',
-    description: 'לימוד Python לטובת עיבוד נתונים ואוטומציה בסיסית של תהליכים.',
+    title: 'Step Two: High-Level Programming',
+    description: 'Learning Python for data processing and basic process automation.',
     level: Difficulty.Beginner,
     tools: ['Python', 'VS Code', 'Raspberry Pi']
   },
   {
-    title: 'צעד שלישי: כניסה לעולם ה-ROS',
-    description: 'הבנת קונספטים של Nodes, Topics ו-Services. פיתוח רובוט וירטואלי ראשון.',
+    title: 'Step Three: Entering the ROS World',
+    description: 'Understanding Nodes, Topics, and Services. Developing your first virtual robot.',
     level: Difficulty.Intermediate,
     tools: ['ROS2', 'Ubuntu', 'Docker']
   },
   {
-    title: 'צעד רביעי: סימולציות מתקדמות',
-    description: 'יצירת סביבות עבודה ב-Gazebo ומידול רובוטים באמצעות URDF/SDF.',
+    title: 'Step Four: Advanced Simulations',
+    description: 'Creating work environments in Gazebo and modeling robots using URDF/SDF.',
     level: Difficulty.Intermediate,
     tools: ['Gazebo', 'FreeCAD', 'Blender']
   },
   {
-    title: 'צעד חמישי: בינה מלאכותית וראייה',
-    description: 'שילוב OpenCV לזיהוי אובייקטים וניווט אוטונומי מבוסס LiDAR/Camera.',
+    title: 'Step Five: AI and Computer Vision',
+    description: 'Integrating OpenCV for object detection and LiDAR/Camera-based navigation.',
     level: Difficulty.Advanced,
     tools: ['OpenCV', 'TensorFlow', 'MediaPipe']
   }

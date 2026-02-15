@@ -15,6 +15,9 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "License Type",
     commercial_only: "Commercial Friendly",
     open_source_only: "Community Projects",
+    clear_filters: "Clear All",
+    no_results: "No results found...",
+    reset_all: "Reset all filters",
     commercial_section_title: "Ready to turn your idea into a commercial product?",
     commercial_section_desc: "Open source tools like ROS 2 and Gazebo allow for industrial-grade robot development with licenses (like Apache 2.0) that permit full commercial use without licensing fees.",
     scalability: "Scalability",
@@ -39,7 +42,9 @@ export const TRANSLATIONS: Record<Language, any> = {
     roadmap_title: "Robotics Developer Roadmap",
     roadmap_desc: "From beginners to advanced: The recommended path for entering the world of open-source robotics.",
     step: "Step",
-    dir: "ltr"
+    dir: "ltr",
+    cats: { Software: "Software", Simulation: "Simulation", Hardware: "Hardware", Vision: "Vision", AI: "AI" },
+    diffs: { Beginner: "Beginner", Intermediate: "Intermediate", Advanced: "Advanced" }
   },
   he: {
     title: "OpenRobotics Hub",
@@ -54,6 +59,9 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "סוג רישיון",
     commercial_only: "מתאים למסחרי",
     open_source_only: "פרויקטי קהילה",
+    clear_filters: "נקה הכל",
+    no_results: "לא נמצאו תוצאות...",
+    reset_all: "נקה מסננים",
     commercial_section_title: "מוכן להפוך את הרעיון למוצר מסחרי?",
     commercial_section_desc: "הכלים בקוד פתוח כמו ROS 2 ו-Gazebo מאפשרים פיתוח של רובוטים ברמה תעשייתית עם רישיונות (כמו Apache 2.0) המאפשרים שימוש מסחרי מלא ללא עלויות רישוי.",
     scalability: "סקלאביליות",
@@ -78,7 +86,9 @@ export const TRANSLATIONS: Record<Language, any> = {
     roadmap_title: "מפת דרכים למפתח הרובוטיקה",
     roadmap_desc: "ממתחילים ועד למתקדמים: המסלול המומלץ לכניסה לעולם הרובוטיקה בקוד פתוח.",
     step: "שלב",
-    dir: "rtl"
+    dir: "rtl",
+    cats: { Software: "תוכנה", Simulation: "סימולציה", Hardware: "חומרה", Vision: "ראייה", AI: "בינה מלאכותית" },
+    diffs: { Beginner: "מתחילים", Intermediate: "בינוניים", Advanced: "מתקדמים" }
   },
   zh: {
     title: "OpenRobotics Hub",
@@ -93,8 +103,13 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "许可证类型",
     commercial_only: "商业友好",
     open_source_only: "社区项目",
+    clear_filters: "清除全部",
+    no_results: "未找到结果...",
+    reset_all: "重置所有过滤器",
     commercial_section_title: "准备好将您的想法转化为商业产品了吗？",
-    dir: "ltr"
+    dir: "ltr",
+    cats: { Software: "软件", Simulation: "仿真", Hardware: "硬件", Vision: "视觉", AI: "人工智能" },
+    diffs: { Beginner: "初级", Intermediate: "中级", Advanced: "高级" }
   },
   hi: {
     title: "OpenRobotics Hub",
@@ -109,7 +124,12 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "लाइसेंस प्रकार",
     commercial_only: "व्यावसायिक रूप से अनुकूल",
     open_source_only: "सामुदायिक परियोजनाएं",
-    dir: "ltr"
+    clear_filters: "सभी साफ़ करें",
+    no_results: "कोई परिणाम नहीं मिला...",
+    reset_all: "सभी फ़िल्टर रीसेट करें",
+    dir: "ltr",
+    cats: { Software: "सॉफ्टवेयर", Simulation: "सिमुलेशन", Hardware: "हार्डवेयर", Vision: "दृष्टि", AI: "एआई" },
+    diffs: { Beginner: "शुरुआती", Intermediate: "मध्यम", Advanced: "उन्नत" }
   },
   de: {
     title: "OpenRobotics Hub",
@@ -124,7 +144,12 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "Lizenztyp",
     commercial_only: "Kommerziell freundlich",
     open_source_only: "Community-Projekte",
-    dir: "ltr"
+    clear_filters: "Alles löschen",
+    no_results: "Keine Ergebnisse gefunden...",
+    reset_all: "Alle Filter zurücksetzen",
+    dir: "ltr",
+    cats: { Software: "Software", Simulation: "Simulation", Hardware: "Hardware", Vision: "Vision", AI: "KI" },
+    diffs: { Beginner: "Anfänger", Intermediate: "Mittel", Advanced: "Fortgeschritten" }
   },
   es: {
     title: "OpenRobotics Hub",
@@ -139,12 +164,17 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "Tipo de licencia",
     commercial_only: "Apto para uso comercial",
     open_source_only: "Proyectos comunitarios",
-    dir: "ltr"
+    clear_filters: "Limpiar todo",
+    no_results: "No se encontraron resultados...",
+    reset_all: "Restablecer filtros",
+    dir: "ltr",
+    cats: { Software: "Software", Simulation: "Simulación", Hardware: "Hardware", Vision: "Visión", AI: "IA" },
+    diffs: { Beginner: "Principiante", Intermediate: "Intermedio", Advanced: "Avanzado" }
   },
   fr: {
     title: "OpenRobotics Hub",
     tagline: "L'avenir de la robotique commence ici.",
-    hero_description: "Le principal centre de ressources pour les ingénieurs en robotique, les chercheurs et les passionnés. Environnements de développement, simulateurs et outils avancés à des fins éducatives et commerciales.",
+    hero_description: "Le principal centre de ressources pour les en robotique, les chercheurs et les passionnés. Environnements de développement, simulateurs et outils avancés à des fins éducatives et commerciales.",
     all_needs: "Tout ce dont vous avez besoin pour construire un robot open-source",
     start_learning: "Commencez à apprendre maintenant",
     view_projects: "Voir des exemples de projets",
@@ -154,6 +184,11 @@ export const TRANSLATIONS: Record<Language, any> = {
     filter_commercial: "Type de licence",
     commercial_only: "Usage commercial",
     open_source_only: "Projets communautaires",
-    dir: "ltr"
+    clear_filters: "Effacer tout",
+    no_results: "Aucun résultat trouvé...",
+    reset_all: "Réinitialiser les filtres",
+    dir: "ltr",
+    cats: { Software: "Logiciel", Simulation: "Simulation", Hardware: "Matériel", Vision: "Vision", AI: "IA" },
+    diffs: { Beginner: "Débutant", Intermediate: "Intermédiaire", Advanced: "Avancé" }
   }
 };

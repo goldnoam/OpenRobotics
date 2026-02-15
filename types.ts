@@ -1,16 +1,16 @@
 
 export enum Difficulty {
-  Beginner = 'מתחילים',
-  Intermediate = 'בינוניים',
-  Advanced = 'מתקדמים'
+  Beginner = 'Beginner',
+  Intermediate = 'Intermediate',
+  Advanced = 'Advanced'
 }
 
 export enum ResourceCategory {
-  Software = 'תוכנה',
-  Simulation = 'סימולציה',
-  Hardware = 'חומרה',
-  Vision = 'ראייה ממוחשבת',
-  AI = 'בינה מלאכותית'
+  Software = 'Software',
+  Simulation = 'Simulation',
+  Hardware = 'Hardware',
+  Vision = 'Vision',
+  AI = 'AI'
 }
 
 export interface Resource {
