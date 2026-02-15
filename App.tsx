@@ -16,13 +16,22 @@ import {
   Code,
   CheckCircle2,
   XCircle,
-  Layers
+  Layers,
+  Globe,
+  Filter
 } from 'lucide-react';
 import { RESOURCES, ROADMAP, TOP_COMPARISON } from './constants';
 import { Resource, Difficulty, ResourceCategory, ComparisonEntry } from './types';
+import { TRANSLATIONS, Language } from './translations';
 
 // Components
-const Navbar: React.FC<{ theme: 'light' | 'dark', toggleTheme: () => void }> = ({ theme, toggleTheme }) => {
+const Navbar: React.FC<{ 
+  theme: 'light' | 'dark', 
+  toggleTheme: () => void,
+  language: Language,
+  setLanguage: (lang: Language) => void,
+  t: any
+}> = ({ theme, toggleTheme, language, setLanguage, t }) => {
   return (
     <nav className="sticky top-0 z-50 glass border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex justify-between items-center">
       <div className="flex items-center gap-3">
@@ -30,15 +39,44 @@ const Navbar: React.FC<{ theme: 'light' | 'dark', toggleTheme: () => void }> = (
           <Cpu className="text-white w-6 h-6" />
         </div>
         <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          OpenRobotics Hub
+          {t.title}
         </h1>
       </div>
       
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
+        <div className="relative group">
+          <button 
+            className="flex items-center gap-1 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            title="Change Language / החלף שפה"
+          >
+            <Globe className="w-5 h-5" />
+            <span className="hidden md:inline text-xs font-bold uppercase">{language}</span>
+          </button>
+          <div className="absolute top-full left-0 md:right-0 md:left-auto mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden">
+            {[
+              { id: 'en', label: 'English' },
+              { id: 'he', label: 'עברית' },
+              { id: 'zh', label: '中文' },
+              { id: 'hi', label: 'हिन्दी' },
+              { id: 'de', label: 'Deutsch' },
+              { id: 'es', label: 'Español' },
+              { id: 'fr', label: 'Français' },
+            ].map(lang => (
+              <button
+                key={lang.id}
+                onClick={() => setLanguage(lang.id as Language)}
+                className={`w-full text-left md:text-right px-4 py-2 text-sm hover:bg-primary/10 transition-colors ${language === lang.id ? 'text-primary font-bold' : ''}`}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <button 
           onClick={toggleTheme}
           className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-          title={theme === 'dark' ? "החלף למצב בהיר" : "החלף למצב כהה"}
+          title={theme === 'dark' ? "Switch to Light" : "Switch to Dark"}
         >
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
@@ -47,7 +85,7 @@ const Navbar: React.FC<{ theme: 'light' | 'dark', toggleTheme: () => void }> = (
           target="_blank" 
           rel="noopener noreferrer" 
           className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
-          title="צפה בפרויקט ב-GitHub"
+          title="GitHub"
         >
           <Github className="w-5 h-5" />
         </a>
@@ -56,7 +94,7 @@ const Navbar: React.FC<{ theme: 'light' | 'dark', toggleTheme: () => void }> = (
   );
 };
 
-const ResourceCard: React.FC<{ resource: Resource }> = ({ resource }) => {
+const ResourceCard: React.FC<{ resource: Resource, t: any }> = ({ resource, t }) => {
   const getDifficultyColor = (diff: Difficulty) => {
     switch (diff) {
       case Difficulty.Beginner: return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
@@ -71,9 +109,16 @@ const ResourceCard: React.FC<{ resource: Resource }> = ({ resource }) => {
         <span className={`px-3 py-1 rounded-full text-xs font-bold ${getDifficultyColor(resource.difficulty)}`}>
           {resource.difficulty}
         </span>
-        <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-          {resource.category}
-        </span>
+        <div className="flex flex-col items-end">
+          <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+            {resource.category}
+          </span>
+          {resource.isCommercial && (
+            <span className="text-[10px] text-secondary font-bold flex items-center gap-1 mt-1">
+              <ShieldCheck className="w-3 h-3" /> Commercial
+            </span>
+          )}
+        </div>
       </div>
       <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{resource.name}</h3>
       <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
@@ -91,38 +136,39 @@ const ResourceCard: React.FC<{ resource: Resource }> = ({ resource }) => {
         target="_blank" 
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 text-primary font-bold hover:underline"
-        title={`עבור לאתר הרשמי של ${resource.name}`}
+        title={resource.name}
       >
-        צפה במשאב <ExternalLink className="w-4 h-4" />
+        View Resource <ExternalLink className="w-4 h-4" />
       </a>
     </div>
   );
 };
 
-const ComparisonTable: React.FC = () => {
+const ComparisonTable: React.FC<{ t: any }> = ({ t }) => {
+  if (!t.comparison_title) return null;
   return (
     <div className="py-20 bg-white dark:bg-gray-950 border-t border-b border-gray-100 dark:border-gray-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
             <Layers className="text-primary w-8 h-8" />
-            השוואת פלטפורמות מובילות
+            {t.comparison_title}
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
-            מבט טכני מהיר על חמשת המשאבים הפופולריים ביותר לפיתוח רובוטיקה בקוד פתוח.
+            {t.comparison_desc}
           </p>
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
-          <table className="w-full text-right border-collapse min-w-[800px]">
+          <table className="w-full text-right md:text-center border-collapse min-w-[800px]">
             <thead>
               <tr className="bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-800">
-                <th className="px-6 py-4 font-bold">שם הפלטפורמה</th>
-                <th className="px-6 py-4 font-bold">שימוש מרכזי</th>
-                <th className="px-6 py-4 font-bold">רמת קושי</th>
-                <th className="px-6 py-4 font-bold">סטנדרט בתעשייה</th>
-                <th className="px-6 py-4 font-bold">רישיון</th>
-                <th className="px-6 py-4 font-bold">שפות פיתוח</th>
+                <th className="px-6 py-4 font-bold">{t.table_name}</th>
+                <th className="px-6 py-4 font-bold">{t.table_usecase}</th>
+                <th className="px-6 py-4 font-bold">{t.table_difficulty}</th>
+                <th className="px-6 py-4 font-bold">{t.table_standard}</th>
+                <th className="px-6 py-4 font-bold">{t.table_license}</th>
+                <th className="px-6 py-4 font-bold">{t.table_language}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
@@ -152,14 +198,15 @@ const ComparisonTable: React.FC = () => {
   );
 };
 
-const RoadmapSection: React.FC = () => {
+const RoadmapSection: React.FC<{ t: any }> = ({ t }) => {
+  if (!t.roadmap_title) return null;
   return (
     <div className="py-20 bg-gray-50 dark:bg-gray-900/50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-4">מפת דרכים למפתח הרובוטיקה</h2>
+          <h2 className="text-3xl font-bold mb-4">{t.roadmap_title}</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
-            ממתחילים ועד למתקדמים: המסלול המומלץ לכניסה לעולם הרובוטיקה בקוד פתוח.
+            {t.roadmap_desc}
           </p>
         </div>
         
@@ -168,7 +215,7 @@ const RoadmapSection: React.FC = () => {
             <div key={index} className={`relative mb-12 md:w-1/2 ${index % 2 === 0 ? 'md:mr-auto md:pr-12' : 'md:ml-auto md:pl-12'}`}>
               <div className="absolute top-0 -right-[11px] md:right-auto md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-primary border-4 border-white dark:border-dark z-10"></div>
               <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <span className="text-primary font-bold text-sm mb-2 block">שלב {index + 1}</span>
+                <span className="text-primary font-bold text-sm mb-2 block">{t.step} {index + 1}</span>
                 <h3 className="text-xl font-bold mb-3">{step.title}</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 leading-relaxed">
                   {step.description}
@@ -191,25 +238,43 @@ const RoadmapSection: React.FC = () => {
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [language, setLanguage] = useState<Language>('he');
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<ResourceCategory | 'All'>('All');
+  const [activeDifficulty, setActiveDifficulty] = useState<Difficulty | 'All'>('All');
+  const [commercialFilter, setCommercialFilter] = useState<'All' | 'Commercial' | 'OpenSource'>('All');
+
+  const t = useMemo(() => TRANSLATIONS[language], [language]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
+    document.documentElement.dir = t.dir || 'ltr';
+    document.documentElement.lang = language;
+  }, [theme, language, t]);
 
   const filteredResources = useMemo(() => {
     return RESOURCES.filter(res => {
       const matchesSearch = res.name.toLowerCase().includes(search.toLowerCase()) || 
                           res.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
       const matchesCategory = activeCategory === 'All' || res.category === activeCategory;
-      return matchesSearch && matchesCategory;
+      const matchesDifficulty = activeDifficulty === 'All' || res.difficulty === activeDifficulty;
+      const matchesCommercial = commercialFilter === 'All' || 
+                               (commercialFilter === 'Commercial' && res.isCommercial) ||
+                               (commercialFilter === 'OpenSource' && !res.isCommercial);
+      
+      return matchesSearch && matchesCategory && matchesDifficulty && matchesCommercial;
     });
-  }, [search, activeCategory]);
+  }, [search, activeCategory, activeDifficulty, commercialFilter]);
 
   return (
     <div className="min-h-screen">
-      <Navbar theme={theme} toggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')} />
+      <Navbar 
+        theme={theme} 
+        toggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')} 
+        language={language}
+        setLanguage={setLanguage}
+        t={t}
+      />
       
       {/* Hero Section */}
       <header className="relative py-24 overflow-hidden">
@@ -220,28 +285,28 @@ const App: React.FC = () => {
         <div className="container mx-auto px-6 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-bold mb-8">
             <ShieldCheck className="w-4 h-4" />
-            כל מה שצריך כדי לבנות רובוט בקוד פתוח
+            {t.all_needs}
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
-            עתיד הרובוטיקה <br />
-            <span className="text-primary">מתחיל כאן.</span>
+            {t.tagline.split('.')[0]} <br />
+            <span className="text-primary">{t.tagline.split('.')[1] || ''}</span>
           </h1>
           <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-12">
-            מאגר המשאבים המוביל למהנדסי רובוטיקה, חוקרים וחובבים. סביבות פיתוח, סימולטורים, וכלים מתקדמים למטרות לימודיות ומסחריות.
+            {t.hero_description}
           </p>
           
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <button 
               className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/30 transition-all flex items-center gap-2"
-              title="התחל ללמוד את יסודות הרובוטיקה"
+              title={t.start_learning}
             >
-              <BookOpen className="w-5 h-5" /> התחל ללמוד עכשיו
+              <BookOpen className="w-5 h-5" /> {t.start_learning}
             </button>
             <button 
               className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-8 py-4 rounded-xl font-bold border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
-              title="צפה בפרויקטים אמיתיים שנבנו בקוד פתוח"
+              title={t.view_projects}
             >
-              צפה בפרויקטים לדוגמה
+              {t.view_projects}
             </button>
           </div>
         </div>
@@ -250,19 +315,52 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <main className="container mx-auto px-6 pb-24">
         {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-6 items-center justify-between mb-12 bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm">
-          <div className="relative w-full md:w-96">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input 
-              type="text" 
-              placeholder="חפש כלים, שפות או טכנולוגיות..."
-              className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl pr-12 pl-4 py-3 focus:ring-2 focus:ring-primary outline-none"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              title="הזן מילות חיפוש לסינון המשאבים"
-            />
+        <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-8 mb-12">
+          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+            <div className="relative w-full lg:w-1/3">
+              <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input 
+                type="text" 
+                placeholder={t.search_placeholder}
+                className="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl pr-12 pl-4 py-3 focus:ring-2 focus:ring-primary outline-none"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-center lg:justify-end">
+               <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-2xl">
+                 <Filter className="w-4 h-4 text-gray-400" />
+                 <select 
+                    className="bg-transparent text-sm font-bold outline-none border-none focus:ring-0 cursor-pointer"
+                    value={activeDifficulty}
+                    onChange={(e) => setActiveDifficulty(e.target.value as any)}
+                    title={t.filter_difficulty}
+                 >
+                   <option value="All">{t.filter_difficulty}: {t.filter_all}</option>
+                   {Object.values(Difficulty).map(diff => (
+                     <option key={diff} value={diff}>{diff}</option>
+                   ))}
+                 </select>
+               </div>
+
+               <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-2xl">
+                 <ShieldCheck className="w-4 h-4 text-gray-400" />
+                 <select 
+                    className="bg-transparent text-sm font-bold outline-none border-none focus:ring-0 cursor-pointer"
+                    value={commercialFilter}
+                    onChange={(e) => setCommercialFilter(e.target.value as any)}
+                    title={t.filter_commercial}
+                 >
+                   <option value="All">{t.filter_commercial}: {t.filter_all}</option>
+                   <option value="Commercial">{t.commercial_only}</option>
+                   <option value="OpenSource">{t.open_source_only}</option>
+                 </select>
+               </div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 md:pb-0">
+
+          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 justify-center lg:justify-start">
             {['All', ...Object.values(ResourceCategory)].map(cat => (
               <button
                 key={cat}
@@ -272,9 +370,9 @@ const App: React.FC = () => {
                   ? 'bg-primary text-white' 
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
-                title={cat === 'All' ? 'הצג את כל המשאבים' : `הצג משאבים בקטגוריית ${cat}`}
+                title={cat === 'All' ? t.filter_all : cat}
               >
-                {cat === 'All' ? 'הכל' : cat}
+                {cat === 'All' ? t.filter_all : cat}
               </button>
             ))}
           </div>
@@ -283,45 +381,48 @@ const App: React.FC = () => {
         {/* Resource Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredResources.map(res => (
-            <ResourceCard key={res.id} resource={res} />
+            <ResourceCard key={res.id} resource={res} t={t} />
           ))}
         </div>
 
         {filteredResources.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-400 text-lg">לא נמצאו משאבים התואמים את החיפוש שלך...</p>
+            <p className="text-gray-400 text-lg">No results found...</p>
           </div>
         )}
       </main>
 
       {/* Comparison Table Section */}
-      <ComparisonTable />
+      <ComparisonTable t={t} />
 
       {/* Roadmap Section */}
-      <RoadmapSection />
+      <RoadmapSection t={t} />
 
       {/* Commercial Section */}
       <section className="py-24 bg-primary text-white">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-black mb-8">מוכן להפוך את הרעיון למוצר מסחרי?</h2>
-          <p className="text-xl text-primary-100 max-w-2xl mx-auto mb-12">
-            הכלים בקוד פתוח כמו ROS 2 ו-Gazebo מאפשרים פיתוח של רובוטים ברמה תעשייתית עם רישיונות (כמו Apache 2.0) המאפשרים שימוש מסחרי מלא ללא עלויות רישוי.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-right max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-5xl font-black mb-8">{t.commercial_section_title}</h2>
+          {t.commercial_section_desc && (
+            <p className="text-xl text-primary-100 max-w-2xl mx-auto mb-12">
+              {t.commercial_section_desc}
+            </p>
+          )}
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
             <div className="bg-white/10 p-6 rounded-2xl">
-              <Settings className="w-8 h-8 mb-4" />
-              <h4 className="text-xl font-bold mb-2">סקלאביליות</h4>
-              <p className="text-sm opacity-80">מערכות מבוזרות שתומכות בציים של מאות רובוטים.</p>
+              <Settings className="w-8 h-8 mb-4 mx-auto" />
+              <h4 className="text-xl font-bold mb-2">{t.scalability || 'Scalability'}</h4>
+              <p className="text-sm opacity-80">{t.scalability_desc}</p>
             </div>
             <div className="bg-white/10 p-6 rounded-2xl">
-              <Code className="w-8 h-8 mb-4" />
-              <h4 className="text-xl font-bold mb-2">קהילה ענקית</h4>
-              <p className="text-sm opacity-80">אלפי מפתחים ותרומות קוד שחוסכות לך זמן יקר.</p>
+              <Code className="w-8 h-8 mb-4 mx-auto" />
+              <h4 className="text-xl font-bold mb-2">{t.community || 'Community'}</h4>
+              <p className="text-sm opacity-80">{t.community_desc}</p>
             </div>
             <div className="bg-white/10 p-6 rounded-2xl">
-              <ShieldCheck className="w-8 h-8 mb-4" />
-              <h4 className="text-xl font-bold mb-2">אבטחה וסטנדרטים</h4>
-              <p className="text-sm opacity-80">עמידה בסטנדרטים של Cyber-Security ו-DDS.</p>
+              <ShieldCheck className="w-8 h-8 mb-4 mx-auto" />
+              <h4 className="text-xl font-bold mb-2">{t.security || 'Security'}</h4>
+              <p className="text-sm opacity-80">{t.security_desc}</p>
             </div>
           </div>
         </div>
@@ -335,20 +436,20 @@ const App: React.FC = () => {
               <div className="bg-primary p-1.5 rounded-lg">
                 <Cpu className="text-white w-4 h-4" />
               </div>
-              <span className="font-bold text-lg">OpenRobotics Hub</span>
+              <span className="font-bold text-lg">{t.title}</span>
             </div>
             
             <div className="text-center text-gray-500 text-sm">
-              <p>(C) Noam Gold AI 2026</p>
+              <p>{t.footer_copy}</p>
               <p className="mt-1">
-                Send Feedback: <a href="mailto:goldnoamai@gmail.com" className="text-primary hover:underline" title="שלח לנו דוא״ל עם משוב או שאלות">goldnoamai@gmail.com</a>
+                {t.send_feedback}: <a href="mailto:goldnoamai@gmail.com" className="text-primary hover:underline" title={t.send_feedback}>goldnoamai@gmail.com</a>
               </p>
             </div>
 
             <div className="flex gap-6 text-gray-400 text-sm">
-              <a href="#" className="hover:text-primary transition-colors" title="קרא את מדיניות הפרטיות שלנו">פרטיות</a>
-              <a href="#" className="hover:text-primary transition-colors" title="קרא את תנאי השימוש באתר">תנאי שימוש</a>
-              <a href="#" className="hover:text-primary transition-colors" title="קרא עלינו ועל הפרויקט">אודות</a>
+              <a href="#" className="hover:text-primary transition-colors" title={t.privacy}>{t.privacy}</a>
+              <a href="#" className="hover:text-primary transition-colors" title={t.terms}>{t.terms}</a>
+              <a href="#" className="hover:text-primary transition-colors" title={t.about}>{t.about}</a>
             </div>
           </div>
         </div>
