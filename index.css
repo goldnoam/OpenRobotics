@@ -5,20 +5,37 @@
 
 @layer base {
   body {
-    @apply antialiased font-['Assistant',_sans-serif];
+    @apply antialiased font-['Assistant',_sans-serif] transition-colors duration-500;
+  }
+  
+  /* Colorful Theme overrides */
+  html.colorful {
+    --primary: #8B5CF6; /* Violet */
+    --secondary: #EC4899; /* Pink */
+    @apply bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white selection:bg-white selection:text-purple-600;
+  }
+
+  html.colorful body {
+    @apply bg-transparent;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
   .dark .glass {
-    @apply bg-slate-900/70 backdrop-blur-md border border-white/5;
+    @apply bg-slate-900/70 backdrop-blur-lg border border-white/5;
+  }
+  .colorful .glass {
+    @apply bg-white/20 backdrop-blur-xl border border-white/30 text-white;
+  }
+
+  .colorful-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all;
   }
 }
 
-/* Custom keyframes for the robot demo */
 @keyframes pulse-soft {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.05); opacity: 0.8; }
@@ -26,4 +43,18 @@
 
 .animate-pulse-soft {
   animation: pulse-soft 2s infinite ease-in-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-slate-700 rounded-full;
+}
+.colorful ::-webkit-scrollbar-thumb {
+  @apply bg-white/30;
 }
