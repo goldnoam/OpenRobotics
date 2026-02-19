@@ -1,2 +1,29 @@
 
-/* Styles moved to index.html style block for CDN compatibility */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased font-['Assistant',_sans-serif];
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+  .dark .glass {
+    @apply bg-slate-900/70 backdrop-blur-md border border-white/5;
+  }
+}
+
+/* Custom keyframes for the robot demo */
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s infinite ease-in-out;
+}
